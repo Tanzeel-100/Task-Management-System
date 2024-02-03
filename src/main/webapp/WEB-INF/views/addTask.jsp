@@ -175,7 +175,7 @@
   <div class="content">
     <!-- Registration form -->
     <p style="text-align: center">${Desc}</p>
-    <form action="submit-task-form" method="post">
+    <form action="task-added" method="post">
       <div class="task-details">
         <!-- Input box for id -->
         <div class="input-box">
