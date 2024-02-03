@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+
 import java.util.List;
 
 @Setter
@@ -29,15 +30,15 @@ public class TaskDaoImp implements TaskDao {
     }
 
     @Override
-    public Task getTask(Long id) {
-        Task task = hibernateTemplate.get(Task.class,id);
-        return task;
-    }
-
-    @Override
     public List<Task> getTasks() {
         List<Task> tasksList = hibernateTemplate.loadAll(Task.class);
         return tasksList;
+    }
+
+    @Override
+    public Task getTask(Long id) {
+        Task task = hibernateTemplate.get(Task.class, id);
+        return task;
     }
 
     @Override
@@ -49,7 +50,8 @@ public class TaskDaoImp implements TaskDao {
     @Override
     @Transactional
     public void deleteTask(Long id) {
-        Task task= hibernateTemplate.get(Task.class,id);
+        Task task = hibernateTemplate.get(Task.class,id);
         hibernateTemplate.delete(task);
     }
+
 }

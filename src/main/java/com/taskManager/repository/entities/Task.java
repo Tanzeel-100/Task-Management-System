@@ -1,6 +1,7 @@
 package com.taskManager.repository.entities;
 
 import lombok.*;
+
 import javax.persistence.*;
 
 @Setter
@@ -16,17 +17,18 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id")
-    private Long id;
+    private Long taskId;
 
     @Column(name = "task_name")
     private String taskName;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "task_description")
+    private String taskDescription;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User assignedUser;
+    @Column(name = "task_status")
+    private String taskStatus;
+
+    @Column(name = "task_assignee")
+    private String taskAssignee;
 
 }
-
