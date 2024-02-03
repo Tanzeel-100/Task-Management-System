@@ -40,24 +40,22 @@ public class UserController {
         System.out.println("User Registered");
         response.put("status", "success");
         response.put("message", "Registered Successfully");
-
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/login")
-    public String processLogin(@RequestBody User user) {
+    @RequestMapping("/login")
+    public String showLoginForm() {
+        System.out.println("In the login page");
+        return "login";
+    }
+
+    @PostMapping("/login-user")
+    public ResponseEntity<Map<String,String>> processLogin(@RequestBody User user) {
+        Map<String, String> response = new HashMap<>();
         System.out.println(user);
+        response.put("status", "success");
+        response.put("message", "Login Successfully");
         System.out.println("User logged in");
-        return "base";
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }
-
-
-//    @PostMapping("register-user")
-//    public String processRegistration(@ModelAttribute User user, Model m) {
-//        System.out.println(user);
-//        m.addAttribute("msg","Registered Successfully");
-//        userService.registerUser(user);
-//        System.out.println("Registered user");
-//        return "success";
-//    }
