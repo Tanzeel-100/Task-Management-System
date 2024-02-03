@@ -1,6 +1,7 @@
 package com.taskManager.repository.entities;
 
 import lombok.*;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -15,20 +16,16 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Long id;
+    private String userId;
 
-    @Column(name = "username", unique = true, nullable = false)
-    private String username;
+    @Column(name = "user_name", unique = true, nullable = false)
+    private String userName;
 
-    @Column(name = "email", unique = true, nullable = false)
-    private String email;
+    @Column(name = "user_email", unique = true, nullable = false)
+    private String userEmail;
 
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @OneToMany(mappedBy = "assignedUser", cascade = CascadeType.ALL)
-    private List<Task> assigned_tasks;
+    @Column(name = "user_password", nullable = false)
+    private String userPassword;
 
 }
