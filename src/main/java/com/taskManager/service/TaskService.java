@@ -26,8 +26,25 @@ public class TaskService {
         return res;
     }
 
+    public Task getTask(int id) {
+        Task task = taskDaoImp.getTask(id);
+        System.out.println("Task Fetched.");
+        return task;
+    }
+
     public List<Task> getTasks() {
         List<Task> taskList = taskDaoImp.getTasks();
+        System.out.println("Tasks Fetched.");
         return taskList;
+    }
+
+    public void editTask(Task task) {
+        taskDaoImp.updateTask(task);
+        System.out.println("Task updated.");
+    }
+
+    public void deleteTask(int id) {
+        taskDaoImp.deleteTask(id);
+        System.out.println("Task with id" + id + "has been deleted.");
     }
 }

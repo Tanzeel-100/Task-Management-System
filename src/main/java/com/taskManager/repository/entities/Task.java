@@ -3,6 +3,7 @@ package com.taskManager.repository.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -17,7 +18,7 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id")
-    private Long taskId;
+    private Integer taskId;
 
     @Column(name = "task_name")
     private String taskName;
@@ -30,5 +31,14 @@ public class Task {
 
     @Column(name = "task_assignee")
     private String taskAssignee;
+
+    @Column(name = "task_priority")
+    private String taskPriority;
+
+    @Column(name = "task_assigned_date")
+    private Date taskAssignedDate;
+
+    @Column(name = "task_deadline")
+    private Date taskDeadline;
 
 }

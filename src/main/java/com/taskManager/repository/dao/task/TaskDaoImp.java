@@ -36,7 +36,7 @@ public class TaskDaoImp implements TaskDao {
     }
 
     @Override
-    public Task getTask(Long id) {
+    public Task getTask(int id) {
         Task task = hibernateTemplate.get(Task.class, id);
         return task;
     }
@@ -49,7 +49,7 @@ public class TaskDaoImp implements TaskDao {
 
     @Override
     @Transactional
-    public void deleteTask(Long id) {
+    public void deleteTask(int id) {
         Task task = hibernateTemplate.get(Task.class,id);
         hibernateTemplate.delete(task);
     }
