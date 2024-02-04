@@ -28,4 +28,9 @@ public class UserService {
         return res;
     }
 
+    public List<User> getUsers() {
+        List<User> userList = userDaoImp.getUsers();
+        return userList;
+    }
+
 }

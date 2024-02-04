@@ -39,7 +39,7 @@ public class TaskController {
     }
 
     //Insert API
-    @PostMapping(value = "task-added", consumes = "application/json")
+    @PostMapping(value = "tasks", consumes = "application/json")
     public @ResponseBody ResponseEntity<Map<String,Object>> prcessTask(@RequestBody Task task) {
         Map<String, Object> response = new HashMap<>();
         System.out.println(task);
