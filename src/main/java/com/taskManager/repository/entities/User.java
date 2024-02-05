@@ -3,13 +3,10 @@ package com.taskManager.repository.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
-@Setter
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@Data
 
 @Entity
 @Table(name = "users")

@@ -5,11 +5,10 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Date;
 
-@Setter
-@Getter
+
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@Data
 
 @Entity
 @Table(name = "tasks")
