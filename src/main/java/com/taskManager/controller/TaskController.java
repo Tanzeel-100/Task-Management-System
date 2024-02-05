@@ -14,12 +14,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Setter
-@Controller
+//@Setter
+@Controller(value = "/tasks")
 public class TaskController {
 
-    @Autowired
     private TaskService taskService;
+
+    @Autowired
+    public void setTaskService(TaskService taskService) {
+        this.taskService = taskService;
+    }
 
     @PostConstruct
     public void init() {
@@ -27,67 +31,144 @@ public class TaskController {
     }
 
     //Fetch Tasks API
-    @GetMapping("/tasks")
-    public ResponseEntity<Map<String, Object>> showTasks() {
-        List<Task> list = taskService.getTasks();
-        System.out.println("List of tasks: " + list);
+    @GetMapping("/")
+    public ResponseEntity<Map<String, Object>> fetchTasks() {
         Map<String, Object> response = new HashMap<>();
-        response.put("listOfTasks", list);
-        response.put("status", "success");
-        response.put("message", "Tasks Fetched");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        try {
+            List<Task> list = taskService.getTasks();
+            System.out.println("List of tasks: " + list);
+
+            response.put("listOfTasks", list);
+            response.put("status", "success");
+            response.put("message", "Tasks Fetched");
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            // Log the exception or print the stack trace
+            e.printStackTrace();
+
+            response.put("status", "error");
+            response.put("message", "Error fetching tasks");
+
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    //Insert API
-    @PostMapping(value = "tasks", consumes = "application/json")
-    public @ResponseBody ResponseEntity<Map<String,Object>> prcessTask(@RequestBody Task task) {
+    //Add Task API
+    @PostMapping(value = "/", consumes = "application/json")
+    public @ResponseBody ResponseEntity<Map<String, Object>> processTask(@RequestBody Task task) {
         Map<String, Object> response = new HashMap<>();
-        System.out.println(task);
-        taskService.addTask(task);
-        System.out.println("Task added");
-        response.put("task", task);
-        response.put("status", "success");
-        response.put("message", "Task Added");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        try {
+            //We assume that the taskId will not collide as it is auto incremented.
+
+            System.out.println(task);
+            taskService.addTask(task);
+            System.out.println("Task added");
+
+            response.put("task", task);
+            response.put("status", "success");
+            response.put("message", "Task Added");
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            // Log the exception or print the stack trace
+            e.printStackTrace();
+
+            response.put("status", "error");
+            response.put("message", "Error processing the task");
+
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    //Update API
-    @PutMapping(value = "tasks/{taskId}", consumes = "application/json")
-    public @ResponseBody ResponseEntity<Map<String,Object>> editTask(@RequestBody Task task,@PathVariable int taskId) {
-        Map<String,Object> response = new HashMap<>();
-        System.out.println(task);
-        taskService.editTask(task);
-        System.out.println("Task with id:" + taskId + "edited");
-        response.put("task", task);
-        response.put("status", "success");
-        response.put("message", "Task edited");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    //Update Task API
+    @PutMapping(value = "/{taskId}", consumes = "application/json")
+    public ResponseEntity<Map<String, Object>> editTask(@RequestBody Task task, @PathVariable int taskId) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+
+            // Check if Task exists
+            Task existingTask = taskService.getTask(taskId);
+            System.out.println("Task : " + existingTask);
+            if (existingTask == null) {
+                response.put("status", "failed");
+                response.put("message", "Task with ID " + taskId + " not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+
+            // Perform the update
+            task.setTaskId(taskId);
+            taskService.editTask(task);
+
+            response.put("task", task);
+            response.put("status", "success");
+            response.put("message", "Task edited successfully");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("message", "An error occurred while editing the task.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     //Fetch Task API
-    @GetMapping("/tasks/{taskId}")
-    public ResponseEntity<Map<String, Object>> showTask(@PathVariable int taskId) {
-        Task task = taskService.getTask(taskId);
-        System.out.println("Task: " + task);
+    @GetMapping("/{taskId}")
+    public ResponseEntity<Map<String, Object>> fetchTask(@PathVariable int taskId) {
         Map<String, Object> response = new HashMap<>();
-        response.put("Task", task);
-        response.put("status", "success");
-        response.put("message", "Tasks Fetched");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        try {
+            Task task = taskService.getTask(taskId);
+
+            if (task == null) {
+                response.put("status", "failed");
+                response.put("message", "No Task found with ID: " + taskId);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            }
+
+            System.out.println("Task: " + task);
+            response.put("Task", task);
+            response.put("status", "success");
+            response.put("message", "Task Fetched");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("message", "An error occurred while fetching the task.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
-    //Delete API
-    @DeleteMapping("tasks/{taskId}")
+    //Delete Task API
+    @DeleteMapping("/{taskId}")
     public ResponseEntity<Map<String, Object>> deleteTask(@PathVariable int taskId) {
         Map<String, Object> response = new HashMap<>();
-        System.out.println("TasId to be deleted: " + taskId);
-        // Assuming the taskId exist in the database
-        taskService.deleteTask(taskId);
-        System.out.println(taskId + " has been deleted.");
-        response.put("status", "success");
-        response.put("message", "Task deleted successfully");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        try {
+            System.out.println("TaskId to be deleted: " + taskId);
+
+            Task task = taskService.getTask(taskId);
+            if(task == null) {
+                response.put("status", "failed");
+                response.put("message", "No Task found with ID: " + taskId);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            }
+
+            taskService.deleteTask(taskId);
+            System.out.println(taskId + " has been deleted.");
+            response.put("status", "success");
+            response.put("message", "Task deleted successfully");
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            // Log the exception or print the stack trace
+            e.printStackTrace();
+
+            response.put("status", "error");
+            response.put("message", "Error deleting the task");
+
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-
-
 }

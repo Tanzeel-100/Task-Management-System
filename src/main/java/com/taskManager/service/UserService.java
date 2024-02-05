@@ -1,11 +1,9 @@
 package com.taskManager.service;
 
 import com.taskManager.repository.dao.user.UserDao;
-import com.taskManager.repository.entities.Task;
 import com.taskManager.repository.entities.User;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
