@@ -19,8 +19,12 @@ import java.util.Map;
 @RestController
 public class UserController {
 
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostConstruct
     public void init() {

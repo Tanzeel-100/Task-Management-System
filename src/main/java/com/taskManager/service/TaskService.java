@@ -12,8 +12,13 @@ import java.util.List;
 @Setter
 @Service
 public class TaskService {
-    @Autowired
+
     private TaskDao taskDaoImp;
+
+    @Autowired
+    public void setTaskDaoImp(TaskDao taskDaoImp) {
+        this.taskDaoImp = taskDaoImp;
+    }
 
     @PostConstruct
     public void init() {

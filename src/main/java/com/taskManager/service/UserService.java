@@ -12,8 +12,13 @@ import java.util.List;
 @Service
 @Setter
 public class UserService {
-    @Autowired
+
     private UserDao userDaoImp;
+
+    @Autowired
+    public void setUserDaoImp(UserDao userDaoImp) {
+        this.userDaoImp = userDaoImp;
+    }
 
     @PostConstruct
     public void init() {

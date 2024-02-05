@@ -13,8 +13,13 @@ import java.util.List;
 @Setter
 @Repository
 public class UserDaoImp implements UserDao {
-    @Autowired
+
     private HibernateTemplate hibernateTemplate;
+
+    @Autowired
+    public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
+        this.hibernateTemplate = hibernateTemplate;
+    }
 
     @PostConstruct
     public void init() {
